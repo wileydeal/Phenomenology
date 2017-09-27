@@ -1,0 +1,7 @@
+import model Abelian_Higgs_Model_UFO
+define j = g u c d s u~ c~ d~ s~
+generate e+ e- > l+ l-
+add process e+ e- > j j
+add process e+ e- > vl vl~
+add process e+ e- > ta+ ta-
+output e+e-_to_aZZp_noB
