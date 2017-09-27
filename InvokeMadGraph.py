@@ -8,7 +8,7 @@ class GenerateProcesses(object):
         with open(card) as procCard:
             for line in procCard:
                 if "output " in line:
-                    self.processDirectory = line.replace("output ","")
+                    self.processDirectory = os.path.join(os.path.dirname(os.path.abspath(card)), line.replace("output ",""))
     
     def importProcessCard(self, pathToProcessCard):
         if os.path.isfile(pathToProcessCard):

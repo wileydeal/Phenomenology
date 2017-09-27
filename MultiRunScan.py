@@ -20,10 +20,10 @@ class RunScan(object):
         # now set the scanProcessCard instance for use in any relevant methods in this class
         self.scanProcessCard = cardName
 
-    def generateBeamEnergyScanCard(self, lowerLimit, upperLimit, nBins, processName):
-        """Generates a card with nBins equispaced energy bins between lowerLimit (GeV) and upperLimit (GeV)"""
+    def generateBeamEnergyScanCard(self, lowerLimit, upperLimit, nPoints, pathToProcessDirectory):
+        """Generates a card with nPoints equispaced between lowerLimit (GeV) and upperLimit (GeV), inclusive"""
         # generate process card name, throw if already exists - to be caught when invoked
-        cardName = str(processName) + '_EnergyScan.dat'
+        cardName = str(pathToProcessDirectory) + '_EnergyScan2.dat'
         cardName = cardName.replace('\n','').replace('\t','').replace('\r','')
         if os.path.isfile(cardName):
             raise TypeError('Energy Scan Card already exists!')
@@ -32,14 +32,15 @@ class RunScan(object):
         self.scanProcessCard = cardName
         
         # calculate the "step size" between energy scans
-        stepSize = (upperLimit - lowerLimit)/float(nBins+1)
+        stepSize = (upperLimit - lowerLimit)/float(nPoints)
         
         # now let's write the actual card
         with open(self.scanProcessCard, 'a') as tempCard:
-            tempCard.write('launch ' + processName + '\n')
-            for i in range(0, nBins):
+            tempCard.write('launch ' + pathToProcessDirectory + '\n')
+            for i in range(0, nPoints+1):
                 # calculate the beam energy for i-th bin
                 beamEnergy = lowerLimit + stepSize*i
                 tempCard.write('set ebeam ' + str(beamEnergy) + '\n')
-                tempCard.write('launch\n')
-            tempCard.write('print_results --path=./' + processName + '.txt --format=short')
+                if i < nPoints:
+                    tempCard.write('launch\n')
+            tempCard.write('generate print_results --path=./' + pathToProcessDirectory + '.txt --format=short')
