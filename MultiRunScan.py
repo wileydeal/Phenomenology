@@ -41,8 +41,5 @@ class RunScan(object):
                 # calculate the beam energy for i-th bin
                 beamEnergy = lowerLimit + stepSize*i
                 tempCard.write('set ebeam ' + str(beamEnergy) + '\n')
-                if (i < nBins):
-                    tempCard.write('launch\n')
-                else:
-                    tempCard.write('launch -i\n')
+                tempCard.write('launch\n')
             tempCard.write('print_results --path=./' + processName + '.txt --format=short')

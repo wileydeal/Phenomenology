@@ -4,7 +4,7 @@ class GenerateProcesses(object):
     processCard = None
     processDirectory = None
     
-    def parseCard(self, card):
+    def __parseCard(self, card):
         with open(card) as procCard:
             for line in procCard:
                 if "output " in line:
@@ -14,13 +14,13 @@ class GenerateProcesses(object):
         if os.path.isfile(pathToProcessCard):
             print 'Importing process card: {}'.format(pathToProcessCard)
             self.processCard = pathToProcessCard
-            self.parseCard(self.processCard)
+            self.__parseCard(self.processCard)
         else:
             raise TypeError('Process card is not valid!')
 
-    def runMadGraph(self, runCard):
+    def runMadGraph(self, pathToProcessCard):
         try:
-            os.system('mg5_aMC ' + runCard)
+            os.system('mg5_aMC ' + pathToProcessCard)
         except:
             print "An error occurred. Is MadGraph in your path variables??? O.o"
             return
